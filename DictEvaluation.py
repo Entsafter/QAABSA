@@ -1,8 +1,6 @@
 from QAABSA.utils import ceilFloor, cutOff
 from QAABSA.DictScaling import linearScaleDict, cufOffScaleDict, cufOffRoundScaleDict
-import aspect_based_sentiment_analysis as absa
 
-nlp_sentiment = absa.load()
 
 def countOccurences_1_1(positive_answers, negative_answers, text, scaleType):
 
@@ -32,7 +30,7 @@ def countOccurences_1_1(positive_answers, negative_answers, text, scaleType):
   elif scaleType == 'cutOffRound':
     return cufOffRoundScaleDict(scoreDict, 10, -10)
 
-def countOccurenceswithABSA_1_1(positive_answers, negative_answers, text, scaleType):
+def countOccurenceswithABSA_1_1(positive_answers, negative_answers, text, scaleType, nlp_sentiment):
 
   # Create list with all indices of the string
   answerIndices = list(range(0, len(text)))
