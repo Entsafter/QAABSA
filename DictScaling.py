@@ -1,4 +1,4 @@
-from utils import cutOff
+from QAABSA.utils import cutOff
 
 def linearScaleDict(inputDict, wanted_max, wanted_min):
     """Returns a scaled list. Min value will be wanted_min, max value wanted_mad

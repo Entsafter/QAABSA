@@ -1,5 +1,5 @@
-from utils import ceilFloor, cutOff
-from DictScaling import linearScaleDict, cufOffScaleDict, cufOffRoundScaleDict
+from QAABSA.utils import ceilFloor, cutOff
+from QAABSA.DictScaling import linearScaleDict, cufOffScaleDict, cufOffRoundScaleDict
 
 def countOccurences_1_1(positive_answers, negative_answers, text, scaleType):
 
@@ -19,7 +19,7 @@ def countOccurences_1_1(positive_answers, negative_answers, text, scaleType):
   for element in answerIndices:
     for answer in negative_answers:
       if element in range(answer['start'], answer['end']):
-        scoreDict[element] -= 1 
+        scoreDict[element] -= 1
 
   # Scale and return
   if scaleType == "linearScale":
