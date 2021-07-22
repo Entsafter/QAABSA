@@ -46,7 +46,7 @@ def countOccurenceswithABSA_1_1(positive_answers, negative_answers, text, scaleT
         # Checking if the sentiment is positive
         sentiment_answer, _ = nlp_sentiment(text=text, aspects=[answer['answer'], 'none'])
 
-        for elemennt in scoreDict:
+        for element in scoreDict:
             if element in range(answer['start'], answer['end']) and sentiment_answer.sentiment == absa.Sentiment.positive:
                 scoreDict[element] += 1
 
