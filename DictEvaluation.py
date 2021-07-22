@@ -1,6 +1,6 @@
 from QAABSA.utils import ceilFloor, cutOff
 from QAABSA.DictScaling import linearScaleDict, cufOffScaleDict, cufOffRoundScaleDict
-
+import aspect_based_sentiment_analysis as absa
 
 def countOccurences_1_1(positive_answers, negative_answers, text, scaleType):
 
