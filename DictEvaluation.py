@@ -36,7 +36,7 @@ def countOccurenceswithABSA_1_1(positive_answers, negative_answers, text, scaleT
     answerIndices = list(range(0, len(text)))
 
     # Counting number of occurences
-    scoreDict: = {}
+    scoreDict = {}
     # Calculate positive scores
     for element in answerIndices:
       scoreDict[element] = 0
