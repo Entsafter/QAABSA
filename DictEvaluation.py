@@ -57,13 +57,13 @@ def countOccurenceswithABSA_1_1(positive_answers, negative_answers, text, scaleT
             if element in range(answer['start'], answer['end']) and sentiment_answer.sentiment == absa.Sentiment.negative:
                 scoreDict[element] -= 1
 
-  # Scale and return
-  if scaleType == "linearScale":
-    return linearScaleDict(scoreDict, 10, -10)
-  elif scaleType == "cutOff":
-    return cufOffScaleDict(scoreDict, 10, -10)
-  elif scaleType == 'cutOffRound':
-    return cufOffRoundScaleDict(scoreDict, 10, -10)
+    # Scale and return
+    if scaleType == "linearScale":
+        return linearScaleDict(scoreDict, 10, -10)
+    elif scaleType == "cutOff":
+        return cufOffScaleDict(scoreDict, 10, -10)
+    elif scaleType == 'cutOffRound':
+        return cufOffRoundScaleDict(scoreDict, 10, -10)
 
 
 def countOccurencesScoreScaled_1_2(positive_answers, negative_answers, text, scaleType):
