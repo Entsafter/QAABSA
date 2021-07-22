@@ -41,12 +41,13 @@ def countOccurenceswithABSA_1_1(positive_answers, negative_answers, text, scaleT
   # Calculate positive scores
   for element in answerIndices:
     scoreDict[element] = 0
-    for answer in positive_answers:
-        # Checking if the sentiment is positive
-        print(answer)
-        sentiment_answer, _ = nlp_sentiment(text=text, aspects=[answer['answer'], 'none'])
-        if element in range(answer['start'], answer['end']) and sentiment_answer.sentiment == absa.Sentiment.positive:
-            scoreDict[element] += 1
+    
+for answer in positive_answers:
+    # Checking if the sentiment is positive
+    print(answer)
+    sentiment_answer, _ = nlp_sentiment(text=text, aspects=[answer['answer'], 'none'])
+    if element in range(answer['start'], answer['end']) and sentiment_answer.sentiment == absa.Sentiment.positive:
+        scoreDict[element] += 1
 
   for element in answerIndices:
     for answer in negative_answers:
