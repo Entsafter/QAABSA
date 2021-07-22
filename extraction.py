@@ -1,4 +1,5 @@
 from collections import Counter
+import numpy as np
 
 
 test_text = "The tree is great"
@@ -28,12 +29,18 @@ def getAspectSpans(inputDict, text, type='MaxMin'):
     rangesDict = createRanges(inputList)
 
     if type == 'MaxMin':
-        outputAspects = []
-        listMax = max(inputList)
-        listMin = min(inputList)
-        textSpans = [k for (k, v) in rangesDict.items() if v in [listMax, listMin]]
+        allowed = [max(inputList), min(inputList)]
 
-        for start, end in textSpans:
-            outputAspects.append(text[start:end])
+    elif type == 'Percentile':
+        allowed = [x for x in inputList if (x < np.percentile(inputList, 20) or x > np.percentile(inputList, 80)) and x not in [-1, 0, 1]]
+
+
+
+    outputAspects = []
+
+    textSpans = [k for (k, v) in rangesDict.items() if v in allowed and v != 0]
+
+    for start, end in textSpans:
+        outputAspects.append(text[start:end])
 
     return outputAspects
