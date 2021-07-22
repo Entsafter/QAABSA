@@ -32,28 +32,30 @@ def countOccurences_1_1(positive_answers, negative_answers, text, scaleType):
 
 def countOccurenceswithABSA_1_1(positive_answers, negative_answers, text, scaleType, nlp_sentiment):
 
-  # Create list with all indices of the string
-  answerIndices = list(range(0, len(text)))
+    # Create list with all indices of the string
+    answerIndices = list(range(0, len(text)))
 
-  # Counting number of occurences
-  scoreDict = {}
+    # Counting number of occurences
+    scoreDict: = {}
+    # Calculate positive scores
+    for element in answerIndices:
+      scoreDict[element] = 0
 
-  # Calculate positive scores
-  for element in answerIndices:
-    scoreDict[element] = 0
-    
-for answer in positive_answers:
-    # Checking if the sentiment is positive
-    print(answer)
-    sentiment_answer, _ = nlp_sentiment(text=text, aspects=[answer['answer'], 'none'])
-    if element in range(answer['start'], answer['end']) and sentiment_answer.sentiment == absa.Sentiment.positive:
-        scoreDict[element] += 1
 
-  for element in answerIndices:
+    for answer in positive_answers:
+        # Checking if the sentiment is positive
+        sentiment_answer, _ = nlp_sentiment(text=text, aspects=[answer['answer'], 'none'])
+
+        for elemennt in scoreDict:
+            if element in range(answer['start'], answer['end']) and sentiment_answer.sentiment == absa.Sentiment.positive:
+                scoreDict[element] += 1
+
     for answer in negative_answers:
         sentiment_answer, _ = nlp_sentiment(text=text, aspects=[answer['answer'], 'none'])
-        if element in range(answer['start'], answer['end']) and sentiment_answer.sentiment == absa.Sentiment.negative:
-            scoreDict[element] -= 1
+
+        for element in scoreDict:
+            if element in range(answer['start'], answer['end']) and sentiment_answer.sentiment == absa.Sentiment.negative:
+                scoreDict[element] -= 1
 
   # Scale and return
   if scaleType == "linearScale":
