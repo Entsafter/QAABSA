@@ -45,8 +45,8 @@ def getAspectSpans(inputDict, text, maxScore, excludePercentage, percentile=80, 
         negativeAllowed = np.percentile(inputList, 100-percentile)
 
 
-    positiveAllowed = [x for x in inputList if x >= positiveAllowed and (x < excludeMin or x > excludeMax]
-    negativeAllowed = [x for x in inputList if x <= negativeAllowed and (x < excludeMin or x > excludeMax]
+    positiveAllowed = [x for x in inputList if x >= positiveAllowed and (x < excludeMin or x > excludeMax)]
+    negativeAllowed = [x for x in inputList if x <= negativeAllowed and (x < excludeMin or x > excludeMax)]
 
     outputAspects = []
 
