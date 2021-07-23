@@ -75,7 +75,7 @@ class ElementList:
 
   def inputFile(self, path, fileType):
     if fileType == 'Laptop':
-      df = readLaptop(path)
+      df = self.readLaptop(path)
 
     for row in df.iterrows():
       dE = DataElement(row['text'], row['aspects'], row['spans'], asba_nlp=self.nlp)
