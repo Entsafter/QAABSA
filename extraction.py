@@ -29,8 +29,8 @@ def getAspectSpans(inputDict, text, type='MinMax'):
     rangesDict = createRanges(inputList)
 
     if type == 'MinMax':
-        positiveAllowed = max(inputList) if max(inputList) not in [-1, 0, 1] else 999
-        negativeAllowed = min(inputList) if min(inputList) not in [-1, 0, 1] else -999
+        positiveAllowed = [max(inputList)] if max(inputList) not in [-1, 0, 1] else [999]
+        negativeAllowed = [min(inputList)] if min(inputList) not in [-1, 0, 1] else [-999]
 
     elif type == 'Percentile':
         positiveAllowed = [x for x in inputList if x >= np.percentile(inputList, 80) and x not in [-1, 0, 1]]
@@ -47,6 +47,7 @@ def getAspectSpans(inputDict, text, type='MinMax'):
 
     for start, end, sentiment in textSpans:
         outputAspects.append((text[start:end], sentiment))
+
 
     return textSpans, outputAspects
 
