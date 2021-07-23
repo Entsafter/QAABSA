@@ -62,12 +62,12 @@ class DataElement:
 
 class ElementList:
 
-  def __init__(self, ingoreNeutral, asba_nlp):
+  def __init__(self, ignoreNeutral, asba_nlp):
     self.dataElements = []
     self.length = len(self.dataElements)
 
     self.nlp = asba_nlp
-    self.ignoreNeutral = ingoreNeutral
+    self.ignoreNeutral = ignoreNeutral
 
     self.TP = 0
     self.TN = 0
