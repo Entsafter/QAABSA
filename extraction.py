@@ -23,24 +23,32 @@ def createRanges(inputList):
     return outputDict
 
 
-def getAspectSpans(inputDict, text, maxScore, excludePercentage, type='MinMax'):
+def getAspectSpans(inputDict, text, maxScore, excludePercentage, percentile=80, type='MinMax'):
 
     inputList = [v/maxScore for (k, v) in inputDict.items()]
     rangesDict = createRanges(inputList)
+
+    # Mask for all - elements need to be outside of that range
+    # pass if excludeMin < x < excludeMax
     excludeMin = -excludePercentage
     excludeMax = excludePercentage
 
-
+    # Select the answer spans
+    # Elements need to be bigger/smaller depending on positive/negative
+     # to be selected
     if type == 'MinMax':
-        positiveAllowed = [max(inputList)] if (max(inputList)/maxScore < excludeMin and max(inputList)/maxScore > excludeMax) else [999]
-        negativeAllowed = [min(inputList)] if (max(inputList)/maxScore < excludeMin and max(inputList)/maxScore > excludeMax) else [-999]
+        positiveAllowed = max(inputList) if (max(inputList)/maxScore < excludeMin and max(inputList)/maxScore > excludeMax) else 999
+        negativeAllowed = min(inputList) if (max(inputList)/maxScore < excludeMin and max(inputList)/maxScore > excludeMax) else -999
 
     elif type == 'Percentile':
-        positiveAllowed = [x for x in inputList if x >= np.percentile(inputList, 80) and (max(inputList) < excludeMin and max(inputList) > excludeMax)]
-        negativeAllowed = [x for x in inputList if x <= np.percentile(inputList, 20) and (max(inputList) < excludeMin and max(inputList) > excludeMax)]
+        positiveAllowed = np.percentile(inputList, percentile)
+        negativeAllowed = np.percentile(inputList, 100-percentile)
+
+
+    positiveAllowed = [x for x in inputList if x >= positiveAllowed and (x < excludeMin or x > excludeMax]
+    negativeAllowed = [x for x in inputList if x <= negativeAllowed and (x < excludeMin or x > excludeMax]
 
     outputAspects = []
-
 
     textSpansPositive = [((x, y), 'positive', v) for ((x, y), v) in rangesDict.items() if v in positiveAllowed and y-x > 3]
     textSpansNegative = [((x, y), 'negative', v) for ((x, y), v) in rangesDict.items() if v in negativeAllowed and y-x > 3]
