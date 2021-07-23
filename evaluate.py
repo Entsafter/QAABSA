@@ -13,7 +13,7 @@ class DataElement:
     self.evaluatedText = None
 
     self.trueAspects = trueAspects if not ignoreNeutral else [(text, senti) for (text, senti) in trueAspects if senti != 'neutral']
-    self.trueSpans = trueAspects if not ignoreNeutral else [((x, y), senti) for (x, y, senti) in trueSpans if senti != 'neutral']
+    self.trueSpans = trueAspects if not ignoreNeutral else [((int(x), int(y)), senti) for (x, y, senti) in trueSpans if senti != 'neutral']
 
     self.positivePredictions = None
     self.negativePredictions = None
