@@ -23,16 +23,16 @@ def createRanges(inputList):
     return outputDict
 
 
-def getAspectSpans(inputDict, text, type='MaxMin'):
+def getAspectSpans(inputDict, text, type='MinMax'):
 
     inputList = [v for (k, v) in inputDict.items()]
     rangesDict = createRanges(inputList)
 
-    if type == 'MaxMin':
+    if type == 'MinMax':
         allowed = [max(inputList), min(inputList)]
 
     elif type == 'Percentile':
-        allowed = [x for x in inputList if (x < np.percentile(inputList, 20) or x > np.percentile(inputList, 80)) and x not in [-1, 0, 1]]
+        allowed = [x for x in inputList if (x <= np.percentile(inputList, 20) or x >= np.percentile(inputList, 80)) and x not in [-1, 0, 1]]
 
 
 
@@ -43,4 +43,4 @@ def getAspectSpans(inputDict, text, type='MaxMin'):
     for start, end in textSpans:
         outputAspects.append(text[start:end])
 
-    return outputAspects
+    return textSpans, outputAspects
