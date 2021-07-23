@@ -63,7 +63,7 @@ class ElementList:
 
   def __init__(self, asba_nlp):
     self.dataElements = []
-    self.length = len(dataElements)
+    self.length = len(self.dataElements)
 
     self.nlp = asba_nlp
 
