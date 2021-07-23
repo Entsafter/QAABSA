@@ -41,11 +41,12 @@ def getAspectSpans(inputDict, text, type='MinMax'):
     textSpansPositive = [k for (k, v) in rangesDict.items() if v in positiveAllowed and v != 0]
     textSpansNegative = [k for (k, v) in rangesDict.items() if v in negativeAllowed and v != 0]
 
-    textSpansPositive = [(x, y, 'positive') for (x, y) in textSpansPositive]
-    textSpansNegative = [(x, y, 'negative') for (x, y) in textSpansNegative]
+    textSpansPositive = [((x, y), 'positive') for (x, y) in textSpansPositive]
+    textSpansNegative = [((x, y), 'negative') for (x, y) in textSpansNegative]
     textSpans = textSpansPositive + textSpansNegative
 
-    for start, end, sentiment in textSpans:
+    for span, sentiment in textSpans:
+        start, end = span
         outputAspects.append((text[start:end], sentiment))
 
 
