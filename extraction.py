@@ -29,19 +29,24 @@ def getAspectSpans(inputDict, text, type='MinMax'):
     rangesDict = createRanges(inputList)
 
     if type == 'MinMax':
-        allowed = [max(inputList), min(inputList)]
+        positiveAllowed = max(inputList) if max(inputList) not in [-1, 0, 1] else 999
+        negativeAllowed = min(inputList) if min(inputList) not in [-1, 0, 1] else -999
 
     elif type == 'Percentile':
-        allowed = [x for x in inputList if (x <= np.percentile(inputList, 20) or x >= np.percentile(inputList, 80)) and x not in [-1, 0, 1]]
-
-
+        positiveAllowed = [x for x in inputList if x >= np.percentile(inputList, 80) and x not in [-1, 0, 1]]
+        negativeAllowed = [x for x in inputList if x <= np.percentile(inputList, 20) and x not in [-1, 0, 1]]
 
     outputAspects = []
 
-    textSpans = [k for (k, v) in rangesDict.items() if v in allowed and v != 0]
+    textSpansPositive = [k for (k, v) in rangesDict.items() if v in positiveAllowed and v != 0]
+    textSpansNegative = [k for (k, v) in rangesDict.items() if v in negativeAllowed and v != 0]
 
-    for start, end in textSpans:
-        outputAspects.append(text[start:end])
+    textSpansPositive = [(x, y, 'positive') for (x, y) in textSpansPositive]
+    textSpansNegative = [(x, y, 'negative') for (x, y) in textSpansNegative]
+    textSpans = textSpansPositive + textSpansNegative
+
+    for start, end, sentiment in textSpans:
+        outputAspects.append((text[start:end], sentiment))
 
     return textSpans, outputAspects
 
