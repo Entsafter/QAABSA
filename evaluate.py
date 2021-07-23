@@ -54,7 +54,11 @@ class DataElement:
       self.FN = len([trueSpan for trueSpan, trueSenti in self.trueSpans if not any(isOverlapping(trueSpan, predSpan) and trueSenti == predSenti for predSpan, predSenti in self.finalPredictionSpans)])
       self.FP = len([predSpan for predSpan, predSenti in self.finalPredictionSpans if not any(isOverlapping(trueSpan, predSpan) and trueSenti == predSenti for trueSpan, trueSenti in self.trueSpans)])
 
-    self.F1 = self.TP/(self.TP+0.5*(self.FP+self.FN))
+
+    if not (self.TP == 0 and self.FN == 0 and self.FP == 0):
+        self.F1 = self.TP/(self.TP+0.5*(self.FP+self.FN))
+    else:
+        self.F1 = 1
 
   def renderReview(self):
     renderOccurences(self.evaluatedText, self.text)
