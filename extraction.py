@@ -30,6 +30,10 @@ def getAspectSpans(inputDict, text, maxScore, excludePercentage, type='MinMax'):
     excludeMin = -excludePercentage
     excludeMax = excludePercentage
 
+    print(inputDict.items())
+    print("excludeMin: ", excludeMin)
+    print("excludeMax: ", excludeMax)
+
     if type == 'MinMax':
         positiveAllowed = [max(inputList)] if (max(inputList) < excludeMin and max(inputList) > excludeMax) else [999]
         negativeAllowed = [min(inputList)] if (max(inputList) < excludeMin and max(inputList) > excludeMax) else [-999]
