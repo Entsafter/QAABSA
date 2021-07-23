@@ -5,7 +5,7 @@ import pandas as pd
 import xml.etree.ElementTree as ET
 
 
-class DataElement
+class DataElement:
 
   def __init__(self, text, trueAspects, trueSpans, asba_nlp):
     self.text = text
