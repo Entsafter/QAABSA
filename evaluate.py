@@ -7,13 +7,13 @@ import xml.etree.ElementTree as ET
 
 class DataElement:
 
-  def __init__(self, text, trueAspects, trueSpans, asba_nlp):
+  def __init__(self, text, trueAspects, trueSpans, ignoreNeutral, asba_nlp):
     self.text = text
     self.length = len(text)
     self.evaluatedText = None
 
-    self.trueAspects = trueAspects
-    self.trueSpans = trueSpans
+    self.trueAspects = trueAspects if not ignoreNeutral else [(text, senti) for (text, senti) in trueAspects if senti != 'neutral']
+    self.trueSpans = trueAspects if not ignoreNeutral else [(span, senti) for (span, senti) in trueSpans if senti != 'neutral']
 
     self.positivePredictions = None
     self.negativePredictions = None
