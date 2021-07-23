@@ -80,6 +80,7 @@ class ElementList:
 
     for index, row in df.iterrows():
       dE = DataElement(row['text'], row['aspects'], row['spans'], asba_nlp=self.nlp)
+      self.dataElements.append(dE)
 
 
   def readLaptop(self, path):
