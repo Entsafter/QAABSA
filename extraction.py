@@ -44,3 +44,13 @@ def getAspectSpans(inputDict, text, type='MinMax'):
         outputAspects.append(text[start:end])
 
     return textSpans, outputAspects
+
+def isOverlapping(trueSpan, predSpan):
+  startTrue, endTrue = trueSpan
+  startPred, endPred = predSpan
+
+  if startPred < startTrue:
+    startTrue, endTrue = predSpan
+    startPred, endPred = trueSpan
+
+  return bool(range(max(startTrue, startPred), min(endTrue, endTrue)+1))
