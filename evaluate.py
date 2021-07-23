@@ -1,6 +1,7 @@
 from QAABSA.DictEvaluation import countOccurences_1_1, countOccurenceswithABSA_1_1, countOccurencesScoreScaled_1_2
 from QAABSA.htmlRenderer import renderOccurences
-from QAABSA.extraction import getAspectSpans, isOverlapping
+from QAABSA.extraction import getAspectSpans
+import xml.etree.ElementTree as ET
 
 
 class DataElement:
@@ -56,3 +57,46 @@ class DataElement:
 
   def renderReview(self):
     renderOccurences(self.evaluatedText, self.text)
+
+
+class ElementList:
+
+  def __init__(self, asba_nlp):
+    self.dataElements = []
+    self.length = len(dataElements)
+
+    self.nlp = asba_nlp
+
+    self.TP = 0
+    self.TN = 0
+    self.FP = 0
+    self.FN = 0
+    self.F1 = 0
+
+  def inputFile(self, path, fileType):
+    if fileType == 'Laptop':
+      df = readLaptop(path)
+
+    for row in df.iterrows():
+      dE = DataElement(row['text'], row['aspects'], row['spans'], asba_nlp=self.nlp)
+
+
+  def readLaptop(self, path):
+    tree = ET.parse(path)
+    root = tree.getroot()
+
+    df_Laptop = pd.DataFrame({'text':[], 'aspects':[], 'spans':[]}, index=[])
+
+    for sentence in root:
+      for child in sentence.iter("text"):
+        text = child.text
+
+      aspects = []
+      spans = []
+      for child in sentence.iter("aspectTerm"):
+        spans.append((child.attrib['from'], child.attrib['to'], child.attrib['polarity']))
+        aspects.append((child.attrib["term"], child.attrib['polarity']))
+
+      df_Laptop = df_Laptop.append({'text':text,'aspects':aspects, 'spans':spans}, ignore_index=True)
+
+    return df_Laptop
