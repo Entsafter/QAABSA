@@ -62,11 +62,12 @@ class DataElement:
 
 class ElementList:
 
-  def __init__(self, asba_nlp):
+  def __init__(self, ingoreNeutral, asba_nlp):
     self.dataElements = []
     self.length = len(self.dataElements)
 
     self.nlp = asba_nlp
+    self.ignoreNeutral = ingoreNeutral
 
     self.TP = 0
     self.TN = 0
@@ -79,7 +80,7 @@ class ElementList:
       df = self.readLaptop(path)
 
     for index, row in df.iterrows():
-      dE = DataElement(row['text'], row['aspects'], row['spans'], asba_nlp=self.nlp)
+      dE = DataElement(row['text'], row['aspects'], row['spans'], ignoreNeutral=self.ignoreNeutral, asba_nlp=self.nlp)
       self.dataElements.append(dE)
 
 
