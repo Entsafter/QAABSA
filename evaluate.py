@@ -1,10 +1,11 @@
 from QAABSA.DictEvaluation import countOccurences_1_1, countOccurenceswithABSA_1_1, countOccurencesScoreScaled_1_2
 from QAABSA.htmlRenderer import renderOccurences
 from QAABSA.extraction import getAspectSpans
+import pandas as pd
 import xml.etree.ElementTree as ET
 
 
-class DataElement:
+class DataElement
 
   def __init__(self, text, trueAspects, trueSpans, asba_nlp):
     self.text = text
