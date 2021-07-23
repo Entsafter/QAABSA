@@ -42,7 +42,7 @@ class DataElement:
     self.finalPredictionSpans, self.finalPredictionAspects = getAspectSpans(self.evaluatedText, self.text, type=spanType)
 
 
-  def evaluatePrediction(self, predType):
+  def evaluatePrediction(self, predType, ElementList):
     # Checking if the aspect is in the prediction
     # This can only be used if the trueAspect is very short
     if predType == "inside":
@@ -58,7 +58,10 @@ class DataElement:
     if not (self.TP == 0 and self.FN == 0 and self.FP == 0):
         self.F1 = self.TP/(self.TP+0.5*(self.FP+self.FN))
     else:
+        self.TP = 1
         self.F1 = 1
+
+
 
   def renderReview(self):
     renderOccurences(self.evaluatedText, self.text)
@@ -86,6 +89,16 @@ class ElementList:
     for index, row in df.iterrows():
       dE = DataElement(row['text'], row['aspects'], row['spans'], ignoreNeutral=self.ignoreNeutral, asba_nlp=self.nlp)
       self.dataElements.append(dE)
+
+  def addScores(self, TP, TN, FP, FN):
+      self.TP += TP
+      self.TN += TN
+      self.FP += FP
+      self.FN += FN
+
+      self.F1 = self.TP/(self.TP+0.5*(self.FP+self.FN))
+
+
 
 
   def readLaptop(self, path):
