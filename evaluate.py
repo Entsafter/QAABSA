@@ -28,7 +28,7 @@ class DataElement:
     self.FN = 0
     self.F1 = 0
 
-  def addPredictions(self, positivePredictions, negativePredictions, evalType, spanType):
+  def addPredictions(self, positivePredictions, negativePredictions, evalType, spanType, maxScore, excludePercentage):
     self.positivePredictions = positivePredictions
     self.negativePredictions = negativePredictions
 
@@ -39,7 +39,7 @@ class DataElement:
     elif evalType == 'countOccurencesScoreScaled_1_2':
        self.evaluatedText = countOccurences_1_1(positivePredictions, negativePredictions, self.text, "cutOff", nlp_sentiment=self.nlp)
 
-    self.finalPredictionSpans, self.finalPredictionAspects = getAspectSpans(self.evaluatedText, self.text, type=spanType)
+    self.finalPredictionSpans, self.finalPredictionAspects = getAspectSpans(self.evaluatedText, self.text, maxScore, excludePercentage, type=spanType)
 
 
   def evaluatePrediction(self, predType, ElementList):
