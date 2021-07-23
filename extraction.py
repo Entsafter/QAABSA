@@ -30,13 +30,10 @@ def getAspectSpans(inputDict, text, maxScore, excludePercentage, type='MinMax'):
     excludeMin = -excludePercentage
     excludeMax = excludePercentage
 
-    print(inputDict.items())
-    print("excludeMin: ", excludeMin)
-    print("excludeMax: ", excludeMax)
 
     if type == 'MinMax':
-        positiveAllowed = [max(inputList)] if (max(inputList) < excludeMin and max(inputList) > excludeMax) else [999]
-        negativeAllowed = [min(inputList)] if (max(inputList) < excludeMin and max(inputList) > excludeMax) else [-999]
+        positiveAllowed = [max(inputList)] if (max(inputList)/maxScore < excludeMin and max(inputList)/maxScore > excludeMax) else [999]
+        negativeAllowed = [min(inputList)] if (max(inputList)/maxScore < excludeMin and max(inputList)/maxScore > excludeMax) else [-999]
 
     elif type == 'Percentile':
         positiveAllowed = [x for x in inputList if x >= np.percentile(inputList, 80) and (max(inputList) < excludeMin and max(inputList) > excludeMax)]
@@ -44,9 +41,6 @@ def getAspectSpans(inputDict, text, maxScore, excludePercentage, type='MinMax'):
 
     outputAspects = []
 
-    print(rangesDict.items())
-    print(positiveAllowed)
-    print(negativeAllowed)
 
     textSpansPositive = [((x, y), 'positive', v) for ((x, y), v) in rangesDict.items() if v in positiveAllowed and y-x > 3]
     textSpansNegative = [((x, y), 'negative', v) for ((x, y), v) in rangesDict.items() if v in negativeAllowed and y-x > 3]
