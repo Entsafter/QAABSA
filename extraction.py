@@ -38,8 +38,8 @@ def getAspectSpans(inputDict, text, type='MinMax'):
 
     outputAspects = []
 
-    textSpansPositive = [k for (k, v) in rangesDict.items() if v in positiveAllowed and v != 0]
-    textSpansNegative = [k for (k, v) in rangesDict.items() if v in negativeAllowed and v != 0]
+    textSpansPositive = [(x, y) for ((x, y), v) in rangesDict.items() if v in positiveAllowed and x-y > 3]
+    textSpansNegative = [(x, y) for ((x, y), v) in rangesDict.items() if v in negativeAllowed and x-y > 3]
 
     textSpansPositive = [((x, y), 'positive') for (x, y) in textSpansPositive]
     textSpansNegative = [((x, y), 'negative') for (x, y) in textSpansNegative]
