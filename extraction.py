@@ -37,8 +37,8 @@ def getAspectSpans(inputDict, text, maxScore, excludePercentage, percentile=80, 
     # Elements need to be bigger/smaller depending on positive/negative
      # to be selected
     if type == 'MinMax':
-        positiveAllowed = max(inputList) if (max(inputList)/maxScore < excludeMin and max(inputList)/maxScore > excludeMax) else 999
-        negativeAllowed = min(inputList) if (max(inputList)/maxScore < excludeMin and max(inputList)/maxScore > excludeMax) else -999
+        positiveAllowed = max(inputList) if max(inputList) > excludeMax else 999
+        negativeAllowed = min(inputList) if min(inputList) < excludeMax else -999
 
     elif type == 'Percentile':
         positiveAllowed = np.percentile(inputList, percentile)
@@ -55,7 +55,7 @@ def getAspectSpans(inputDict, text, maxScore, excludePercentage, percentile=80, 
 
     textSpans = textSpansPositive + textSpansNegative
 
-    for span, sentiment in textSpans:
+    for span, sentiment, score in textSpans:
         start, end = span
         outputAspects.append((text[start:end], sentiment))
 

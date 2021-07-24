@@ -41,6 +41,9 @@ def countOccurenceswithABSA_1_1(positive_answers, negative_answers, text, scaleT
     for element in answerIndices:
       scoreDict[element] = 0
 
+    if type(positive_answers) is not list:
+      positive_answers = [positive_answers]
+      negative_answers = [negative_answers]
 
     for answer in positive_answers:
         # Checking if the sentiment is positive

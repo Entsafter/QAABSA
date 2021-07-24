@@ -50,9 +50,9 @@ class DataElement:
       self.FN = len([trueAspect for trueAspect in self.trueAspects if not any(trueAspect in predAspect for predAspect in self.finalPredictionAspects)])
       self.FP = len([predAspect for predAspect in self.finalPredictionAspects if not any(true in predAspect for true in self.trueAspects)])
     elif predType == "overlap":
-      self.TP = len([trueSpan for trueSpan, trueSenti in self.trueSpans if any(isOverlapping(trueSpan, predSpan) and trueSenti == predSenti for predSpan, predSenti in self.finalPredictionSpans)])
-      self.FN = len([trueSpan for trueSpan, trueSenti in self.trueSpans if not any(isOverlapping(trueSpan, predSpan) and trueSenti == predSenti for predSpan, predSenti in self.finalPredictionSpans)])
-      self.FP = len([predSpan for predSpan, predSenti in self.finalPredictionSpans if not any(isOverlapping(trueSpan, predSpan) and trueSenti == predSenti for trueSpan, trueSenti in self.trueSpans)])
+      self.TP = len([trueSpan for trueSpan, trueSenti in self.trueSpans if any(isOverlapping(trueSpan, predSpan) and trueSenti == predSenti for predSpan, predSenti, predScore in self.finalPredictionSpans)])
+      self.FN = len([trueSpan for trueSpan, trueSenti in self.trueSpans if not any(isOverlapping(trueSpan, predSpan) and trueSenti == predSenti for predSpan, predSenti, predScore in self.finalPredictionSpans)])
+      self.FP = len([predSpan for predSpan, predSenti, predScore in self.finalPredictionSpans if not any(isOverlapping(trueSpan, predSpan) and trueSenti == predSenti for trueSpan, trueSenti in self.trueSpans)])
 
 
     if not (self.TP == 0 and self.FN == 0 and self.FP == 0):
