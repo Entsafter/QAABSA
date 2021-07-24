@@ -35,7 +35,7 @@ class DataElement:
     if evalType == 'countOccurenceswithABSA_1_1':
       self.evaluatedText = countOccurenceswithABSA_1_1(positivePredictions, negativePredictions, self.text, "cutOff", nlp_sentiment=self.nlp)
     elif evalType == 'countOccurences_1_1':
-      self.evaluatedText = countOccurences_1_1(positivePredictions, negativePredictions, self.text, "cutOff", nlp_sentiment=self.nlp)
+      self.evaluatedText = countOccurences_1_1(positivePredictions, negativePredictions, self.text, "cutOff")
     elif evalType == 'countOccurencesScoreScaled_1_2':
        self.evaluatedText = countOccurences_1_1(positivePredictions, negativePredictions, self.text, "cutOff", nlp_sentiment=self.nlp)
 
