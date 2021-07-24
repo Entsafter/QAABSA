@@ -59,8 +59,6 @@ def getAspectSpans(inputDict, text, maxScore, excludePercentage, percentile=80, 
         start, end = span
         outputAspects.append((text[start:end], sentiment))
 
-    print(textSpans, outputAspects)
-
 
     return textSpans, outputAspects
 

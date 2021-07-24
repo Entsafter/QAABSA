@@ -89,6 +89,7 @@ class ElementList:
     for index, row in df.iterrows():
       dE = DataElement(row['text'], row['aspects'], row['spans'], ignoreNeutral=self.ignoreNeutral, asba_nlp=self.nlp)
       self.dataElements.append(dE)
+      self.length = len(self.dataElements)
 
   def addScores(self, TP, TN, FP, FN):
       self.TP += TP
