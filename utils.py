@@ -14,7 +14,6 @@ def combineDicts(dictList):
   finalDict = {k:0 for k in range(0, max(dictList[0])+1)}
   for dictElement in dictList:
     for key, value in dictElement.items():
-      print(key)
       finalDict[key] += value
 
   # norm
