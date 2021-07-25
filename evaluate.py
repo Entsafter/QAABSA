@@ -62,12 +62,24 @@ class DataElement:
     # This can only be used if the trueAspect is very short
     if predType == "inside":
       self.TP = len([trueAspect for trueAspect in self.trueAspects if any(trueAspect in predAspect for predAspect in self.finalPredictionAspects)])
+      self.TN = 1 if not (self.trueSpans and self.finalPredictionSpans) else 0
       self.FN = len([trueAspect for trueAspect in self.trueAspects if not any(trueAspect in predAspect for predAspect in self.finalPredictionAspects)])
       self.FP = len([predAspect for predAspect in self.finalPredictionAspects if not any(true in predAspect for true in self.trueAspects)])
     elif predType == "overlap":
       self.TP = len([trueSpan for trueSpan, trueSenti in self.trueSpans if any(isOverlapping(trueSpan, predSpan) and trueSenti == predSenti for predSpan, predSenti, predScore in self.finalPredictionSpans)])
+      self.TN = 1 if not (self.trueSpans and self.finalPredictionSpans) else 0
       self.FN = len([trueSpan for trueSpan, trueSenti in self.trueSpans if not any(isOverlapping(trueSpan, predSpan) and trueSenti == predSenti for predSpan, predSenti, predScore in self.finalPredictionSpans)])
       self.FP = len([predSpan for predSpan, predSenti, predScore in self.finalPredictionSpans if not any(isOverlapping(trueSpan, predSpan) and trueSenti == predSenti for trueSpan, trueSenti in self.trueSpans)])
+
+    elif predType == 'overall':
+      self.TP = len([trueSpan for trueSpan, trueSenti in self.trueSpans if any(isOverlapping(trueSpan, predSpan) and trueSenti == predSenti for predSpan, predSenti, predScore in self.finalPredictionSpans)])
+      self.TN = 1 if not (self.trueSpans and self.finalPredictionSpans) else 0
+      self.FN = len([trueSpan for trueSpan, trueSenti in self.trueSpans if not any(isOverlapping(trueSpan, predSpan) and trueSenti == predSenti for predSpan, predSenti, predScore in self.finalPredictionSpans)])
+      self.FP = len([predSpan for predSpan, predSenti, predScore in self.finalPredictionSpans if not any(isOverlapping(trueSpan, predSpan) and trueSenti == predSenti for trueSpan, trueSenti in self.trueSpans)])
+      self.TP = 1 if not (self.FP or self.FN) else 0
+      self.TN = 1 if not (self.trueSpans and self.finalPredictionSpans) else 0
+      self.FN = 1 if self.FN else 0
+      self.FP = 1 if self.FP else 0
 
 
     if not (self.TP == 0 and self.FN == 0 and self.FP == 0):
