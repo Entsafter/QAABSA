@@ -14,6 +14,7 @@ from nltk.stem import WordNetLemmatizer
 nltk.download('stopwords')
 nltk.download('punkt')
 nltk.download('wordnet')
+nltk.download('averaged_perceptron_tagger')
 
 
 class DataElement:
@@ -102,6 +103,7 @@ class ElementList:
     lem = WordNetLemmatizer()
     stop_words = set(stopwords.words('english'))
     word_tokens = word_tokenize(reviews)
+    word_tokens = [word for (word, tag) in word_tokens if tag == "NN"]
 
     counterDict = Counter([britishize(lem.lemmatize(w)) for w in word_tokens if not w.lower() in list(stop_words) + [',', '.', '?', '!', '-']])
     mostCommonWords = [k for k, v in filtered_sentence.most_common(k)]
