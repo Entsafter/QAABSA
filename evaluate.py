@@ -51,7 +51,7 @@ class DataElement:
     elif evalType == 'countOccurencesScoreScaled_1_2':
        self.evaluatedText = countOccurencesScoreScaled_1_2(positivePredictions, negativePredictions, self.text, "cutOff")
 
-   elif evalType == 'multipleQuestions':
+    elif evalType == 'multipleQuestions':
        self.evaluatedText = multipeQuestions(positivePredictions, negativePredictions, self.text, "cutOff")
 
     self.finalPredictionSpans, self.finalPredictionAspects = getAspectSpans(self.evaluatedText, self.text, maxScore, excludePercentage, type=spanType)
