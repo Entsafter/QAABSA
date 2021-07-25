@@ -32,6 +32,9 @@ class DataElement:
     self.finalPredictionAspects = None
     self.finalPredictionSpans = None
 
+    self.binaryTrue = None
+    self.binaryPrediction = None
+
     self.nlp = asba_nlp
 
     self.TP = 0
@@ -72,10 +75,11 @@ class DataElement:
       self.FP = len([predSpan for predSpan, predSenti, predScore in self.finalPredictionSpans if not any(isOverlapping(trueSpan, predSpan) and trueSenti == predSenti for trueSpan, trueSenti in self.trueSpans)])
 
     elif predType == 'overall':
-      self.TN = 1 if not (self.trueSpans or self.finalPredictionSpans) else 0
-      self.FP = 1 if len([predSpan for predSpan, predSenti, predScore in self.finalPredictionSpans if not any(isOverlapping(trueSpan, predSpan) and trueSenti == predSenti for trueSpan, trueSenti in self.trueSpans)]) >= 1 else 0
-      self.FN = 1 if ((not self.finalPredictionSpans) and self.trueSpans) else 0
-      self.TP = 1 if not (self.TN or self.FP or self.FN) else 0
+      self.binaryTrue = 1 if len(self.trueSpans) else 0
+      isEmpty = 1 if not (self.trueSpans or self.finalPredictionSpans) else 0
+      hasFalsePositive = 1 if len([predSpan for predSpan, predSenti, predScore in self.finalPredictionSpans if not any(isOverlapping(trueSpan, predSpan) and trueSenti == predSenti for trueSpan, trueSenti in self.trueSpans)]) >= 1 else 0
+      hasFalseNegative = 1 if ((not self.finalPredictionSpans) and self.trueSpans) else 0
+      self.binaryPrediction 0 if (isEmpty or hasFalsePositive or hasFalseNegative) else 0
 
 
     if not (self.TP == 0 and self.FN == 0 and self.FP == 0):
