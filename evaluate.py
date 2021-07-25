@@ -6,6 +6,7 @@ import pandas as pd
 from collections import Counter
 import xml.etree.ElementTree as ET
 
+
 # Imports for question creation
 import nltk
 from nltk.corpus import stopwords
@@ -33,7 +34,7 @@ class DataElement:
     self.finalPredictionSpans = None
 
     self.binaryTrue = None
-    self.binaryPrediction = None
+    self.binaryPred = None
 
     self.nlp = asba_nlp
 
@@ -79,7 +80,7 @@ class DataElement:
       isEmpty = 1 if not (self.trueSpans or self.finalPredictionSpans) else 0
       hasFalsePositive = 1 if len([predSpan for predSpan, predSenti, predScore in self.finalPredictionSpans if not any(isOverlapping(trueSpan, predSpan) and trueSenti == predSenti for trueSpan, trueSenti in self.trueSpans)]) >= 1 else 0
       hasFalseNegative = 1 if ((not self.finalPredictionSpans) and self.trueSpans) else 0
-      self.binaryPrediction 0 if (isEmpty or hasFalsePositive or hasFalseNegative) else 0
+      self.binaryPred 0 if (isEmpty or hasFalsePositive or hasFalseNegative) else 0
 
 
     if not (self.TP == 0 and self.FN == 0 and self.FP == 0):
@@ -102,6 +103,9 @@ class ElementList:
 
     self.nlp = asba_nlp
     self.ignoreNeutral = ignoreNeutral
+
+    self.binaryTrue = []
+    self.binaryPred = []
 
     self.TP = 0
     self.TN = 0
@@ -144,12 +148,17 @@ class ElementList:
       self.length = len(self.dataElements)
 
   def addScores(self, TP, TN, FP, FN):
-      self.TP += TP
-      self.TN += TN
-      self.FP += FP
-      self.FN += FN
+          self.TP += TP
+          self.TN += TN
+          self.FP += FP
+          self.FN += FN
 
-      self.F1 = self.TP/(self.TP+0.5*(self.FP+self.FN))
+          self.F1 = self.TP/(self.TP+0.5*(self.FP+self.FN))
+
+  def binaryEval(self):
+      for dataElement in self.dataElements:
+          self.binaryTrue.append(dataElement.binaryTrue)
+          self.binaryPred.append(dataElement.binaryPred)
 
 
 
