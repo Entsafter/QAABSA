@@ -103,7 +103,7 @@ class ElementList:
     lem = WordNetLemmatizer()
     stop_words = set(stopwords.words('english'))
     word_tokens = word_tokenize(reviews)
-    word_tokens = [word for (word, tag) in word_tokens if tag == "NN"]
+    word_tokens = [word for (word, tag) in nltk.pos_tag(word_tokens) if tag == "NN"]
 
     counterDict = Counter([britishize(lem.lemmatize(w)) for w in word_tokens if not w.lower() in list(stop_words) + [',', '.', '?', '!', '-']])
     mostCommonWords = [k for k, v in counterDict.most_common(k)]
@@ -111,8 +111,8 @@ class ElementList:
     positiveQuestions = []
     negativeQuestions = []
     for aspect in mostCommonWords:
-        positiveQuestions.append(f"What is amazing about {aspect}?")
-        negativeQuestions.append(f"What is terrible about {aspect}?")
+        positiveQuestions.append(f"What is amazing about the {aspect}?")
+        negativeQuestions.append(f"What is terrible about the {aspect}?")
 
     return positiveQuestions, negativeQuestions
 
