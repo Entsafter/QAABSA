@@ -77,10 +77,10 @@ class DataElement:
 
     elif predType == 'overall':
       self.binaryTrue = 1 if len(self.trueSpans) else 0
-      isEmpty = 1 if not (self.trueSpans or self.finalPredictionSpans) else 0
+      isEmpty = 1 if not (self.trueSpans and self.finalPredictionSpans) else 0
       hasFalsePositive = 1 if len([predSpan for predSpan, predSenti, predScore in self.finalPredictionSpans if not any(isOverlapping(trueSpan, predSpan) and trueSenti == predSenti for trueSpan, trueSenti in self.trueSpans)]) >= 1 else 0
       hasFalseNegative = 1 if ((not self.finalPredictionSpans) and self.trueSpans) else 0
-      self.binaryPred = 0 if (isEmpty or hasFalsePositive or hasFalseNegative) else 0
+      self.binaryPred = 0 if (isEmpty or hasFalsePositive or hasFalseNegative) else 1
 
 
     if not (self.TP == 0 and self.FN == 0 and self.FP == 0):
