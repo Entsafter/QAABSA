@@ -94,7 +94,7 @@ class ElementList:
     self.FN = 0
     self.F1 = 0
 
-  def generateQuestions(k):
+  def generateQuestions(self, k):
 
     reviews = ""
     for dataElement in self.dataElements:
@@ -106,7 +106,7 @@ class ElementList:
     word_tokens = [word for (word, tag) in word_tokens if tag == "NN"]
 
     counterDict = Counter([britishize(lem.lemmatize(w)) for w in word_tokens if not w.lower() in list(stop_words) + [',', '.', '?', '!', '-']])
-    mostCommonWords = [k for k, v in filtered_sentence.most_common(k)]
+    mostCommonWords = [k for k, v in counterDict.most_common(k)]
 
     positiveQuestions = []
     negativeQuestions = []
