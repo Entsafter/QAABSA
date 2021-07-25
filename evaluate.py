@@ -72,14 +72,10 @@ class DataElement:
       self.FP = len([predSpan for predSpan, predSenti, predScore in self.finalPredictionSpans if not any(isOverlapping(trueSpan, predSpan) and trueSenti == predSenti for trueSpan, trueSenti in self.trueSpans)])
 
     elif predType == 'overall':
-      self.TP = len([trueSpan for trueSpan, trueSenti in self.trueSpans if any(isOverlapping(trueSpan, predSpan) and trueSenti == predSenti for predSpan, predSenti, predScore in self.finalPredictionSpans)])
       self.TN = 1 if not (self.trueSpans or self.finalPredictionSpans) else 0
-      self.FN = len([trueSpan for trueSpan, trueSenti in self.trueSpans if not any(isOverlapping(trueSpan, predSpan) and trueSenti == predSenti for predSpan, predSenti, predScore in self.finalPredictionSpans)])
-      self.FP = len([predSpan for predSpan, predSenti, predScore in self.finalPredictionSpans if not any(isOverlapping(trueSpan, predSpan) and trueSenti == predSenti for trueSpan, trueSenti in self.trueSpans)])
-      self.TP = 1 if not (self.FP or self.FN or self.TN) else 0
-      self.TN = 1 if not (self.trueSpans or self.finalPredictionSpans) else 0
-      self.FN = 1 if self.FN else 0
-      self.FP = 1 if self.FP else 0
+      self.FP = 1 if len([predSpan for predSpan, predSenti, predScore in self.finalPredictionSpans if not any(isOverlapping(trueSpan, predSpan) and trueSenti == predSenti for trueSpan, trueSenti in self.trueSpans)]) >= 1 else 0
+      self.FN = 1 if ((not self.finalPredictionSpans) and self.trueSpans) else 0
+      self.TP = 1 if not (self.TN or self.FP or self.FN) else 0
 
 
     if not (self.TP == 0 and self.FN == 0 and self.FP == 0):
