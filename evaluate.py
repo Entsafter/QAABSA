@@ -1,4 +1,4 @@
-from QAABSA.DictEvaluation import countOccurences_1_1, countOccurenceswithABSA_1_1, countOccurencesScoreScaled_1_2
+from QAABSA.DictEvaluation import countOccurences_1_1, countOccurenceswithABSA_1_1, countOccurencesScoreScaled_1_2, multipeQuestions
 from QAABSA.htmlRenderer import renderOccurences
 from QAABSA.extraction import getAspectSpans, isOverlapping
 from QAABSA.utils import britishize
@@ -50,6 +50,9 @@ class DataElement:
       self.evaluatedText = countOccurences_1_1(positivePredictions, negativePredictions, self.text, "cutOff")
     elif evalType == 'countOccurencesScoreScaled_1_2':
        self.evaluatedText = countOccurencesScoreScaled_1_2(positivePredictions, negativePredictions, self.text, "cutOff")
+
+   elif evalType == 'multipleQuestions':
+       self.evaluatedText = multipeQuestions(positivePredictions, negativePredictions, self.text, "cutOff")
 
     self.finalPredictionSpans, self.finalPredictionAspects = getAspectSpans(self.evaluatedText, self.text, maxScore, excludePercentage, type=spanType)
 

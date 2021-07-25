@@ -1,4 +1,4 @@
-from QAABSA.utils import ceilFloor, cutOff
+from QAABSA.utils import ceilFloor, cutOff, combineDicts
 from QAABSA.DictScaling import linearScaleDict, cufOffScaleDict, cufOffRoundScaleDict
 import aspect_based_sentiment_analysis as absa
 
@@ -96,3 +96,11 @@ def countOccurencesScoreScaled_1_2(positive_answers, negative_answers, text, sca
     return cufOffScaleDict(scoreDict, 10, -10)
   elif scaleType == 'cutOffRound':
     return cufOffRoundScaleDict(scoreDict, 10, -10)
+
+def multipeQuestions(positive_answers, negative_answers, text, scaleType):
+
+  # Combine results of one question type
+  answerDicts = [countOccurences_1_1(posivieAnswer, negativeAnswer, text, scaleType) for positiveAnswer, negativeAnswer in zip(positive_answers, negative_answers)]
+
+  # Creating one final dict
+  return cutOffScaleDict(combineDicts(answerDicts), 10, -10)

@@ -10,6 +10,17 @@ def britishize(string):
 
     return string
 
+def combineDicts(dictList):
+  finalDict = {k:0 for k in range(0, max(dictList[0])+1)}
+  for dictElement in dictList:
+    for key, value in dictElement.items():
+      print(key)
+      finalDict[key] += value
+
+  # norm
+  finalDict = {k:v/len(dictList) for (k, v) in finalDict.items()}
+
+  return finalDict
 
 def ceilFloor(x):
     """Returns the floor for positive numbers, the ceil for negative numbers."""
