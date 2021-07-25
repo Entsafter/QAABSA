@@ -103,4 +103,4 @@ def multipeQuestions(positiveAnswer, negativeAnswer, text, scaleType):
   answerDicts = [countOccurences_1_1(positiveAnswer, negativeAnswer, text, scaleType) for positiveAnswer, negativeAnswer in zip(positiveAnswer, negativeAnswer)]
 
   # Creating one final dict
-  return cutOffScaleDict(combineDicts(answerDicts), 10, -10)
+  return cufOffScaleDict(combineDicts(answerDicts), 10, -10)
