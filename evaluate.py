@@ -1,8 +1,19 @@
 from QAABSA.DictEvaluation import countOccurences_1_1, countOccurenceswithABSA_1_1, countOccurencesScoreScaled_1_2
 from QAABSA.htmlRenderer import renderOccurences
 from QAABSA.extraction import getAspectSpans, isOverlapping
+from QAABSA.utils import britishize
 import pandas as pd
+from collections import Counter
 import xml.etree.ElementTree as ET
+
+# Imports for question creation
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from nltk.stem import WordNetLemmatizer
+nltk.download('stopwords')
+nltk.download('punkt')
+nltk.download('wordnet')
 
 
 class DataElement:
@@ -81,6 +92,30 @@ class ElementList:
     self.FP = 0
     self.FN = 0
     self.F1 = 0
+
+  def generateQuestions(k):
+
+    reviews = ""
+    for dataElement in self.dataElements:
+        reviews += dataElement.text
+
+    lem = WordNetLemmatizer()
+    stop_words = set(stopwords.words('english'))
+    word_tokens = word_tokenize(reviews)
+
+    counterDict = Counter([britishize(lem.lemmatize(w)) for w in word_tokens if not w.lower() in list(stop_words) + [',', '.', '?', '!', '-']])
+    mostCommonWords = [k for k, v in filtered_sentence.most_common(k)]
+
+    positiveQuestions = []
+    negativeQuestions = []
+    for aspect in mostCommonWords:
+        positiveQuestions.append(f"What is amazing about {aspect}?")
+        negativeQuestions.append(f"What is terrible about {aspect}?")
+
+    return positiveQuestions, negativeQuestions
+
+
+
 
   def inputFile(self, path, fileType):
     if fileType == 'Laptop':
