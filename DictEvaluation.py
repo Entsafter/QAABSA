@@ -100,7 +100,7 @@ def countOccurencesScoreScaled_1_2(positive_answers, negative_answers, text, sca
 def multipeQuestions(positiveAnswer, negativeAnswer, text, scaleType):
 
   # Combine results of one question type
-  answerDicts = [countOccurences_1_1(positiveAnswer, negativeAnswer, text, scaleType) for positiveAnswer, negativeAnswer in zip(positive_answers, negative_answers)]
+  answerDicts = [countOccurences_1_1(positiveAnswer, negativeAnswer, text, scaleType) for positiveAnswer, negativeAnswer in zip(positiveAnswer, negativeAnswer)]
 
   # Creating one final dict
   return cutOffScaleDict(combineDicts(answerDicts), 10, -10)
