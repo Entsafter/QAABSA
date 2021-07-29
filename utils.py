@@ -1,6 +1,12 @@
 from math import floor, ceil
 import requests
 
+def find_sub_list(sl,l):
+    sll=len(sl)
+    for ind in (i for i,e in enumerate(l) if e==sl[0]):
+        if l[ind:ind+sll]==sl:
+            return ind,ind+sll-1
+
 def britishize(string):
     url ="https://raw.githubusercontent.com/hyperreality/American-British-English-Translator/master/data/american_spellings.json"
     american_to_british_dict = requests.get(url).json()

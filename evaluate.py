@@ -1,7 +1,7 @@
 from QAABSA.DictEvaluation import countOccurences_1_1, countOccurenceswithABSA_1_1, countOccurencesScoreScaled_1_2, multipeQuestions
 from QAABSA.htmlRenderer import renderOccurences
 from QAABSA.extraction import getAspectSpans, isOverlapping
-from QAABSA.utils import britishize
+from QAABSA.utils import britishize, find_sub_list
 import pandas as pd
 from collections import Counter
 import xml.etree.ElementTree as ET
@@ -12,6 +12,16 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
+from spacy.tokenizer import Tokenizer
+from spacy.lang.en import English
+from sklearn.metrics import f1_score
+import spacy
+nlp = spacy.load("en_core_web_lg")
+stopwords = nlp.Defaults.stop_words
+import string
+nlp = English()
+# Create a blank Tokenizer with just the English vocab
+tokenizer = Tokenizer(nlp.vocab)
 nltk.download('stopwords')
 nltk.download('punkt')
 nltk.download('wordnet')
@@ -22,6 +32,7 @@ class DataElement:
 
   def __init__(self, text, trueAspects, trueSpans, ignoreNeutral, asba_nlp):
     self.text = text
+    self.textToken =
     self.length = len(text)
     self.evaluatedText = None
 
@@ -33,16 +44,11 @@ class DataElement:
     self.finalPredictionAspects = None
     self.finalPredictionSpans = None
 
-    self.binaryTrue = None
-    self.binaryPred = None
+    self.yTrue = None
+    self.yPred = None
 
     self.nlp = asba_nlp
 
-    self.TP = 0
-    self.TN = 0
-    self.FP = 0
-    self.FN = 0
-    self.F1 = 0
 
   def addPredictions(self, positivePredictions, negativePredictions, evalType, spanType, maxScore, excludePercentage):
     self.positivePredictions = positivePredictions
@@ -61,33 +67,41 @@ class DataElement:
     self.finalPredictionSpans, self.finalPredictionAspects = getAspectSpans(self.evaluatedText, self.text, maxScore, excludePercentage, type=spanType)
 
 
-  def evaluatePrediction(self, predType, ElementList):
-    # Checking if the aspect is in the prediction
-    # This can only be used if the trueAspect is very short
-    if predType == "inside":
-      self.TP = len([trueAspect for trueAspect in self.trueAspects if any(trueAspect in predAspect for predAspect in self.finalPredictionAspects)])
-      self.TN = 1 if not (self.trueSpans and self.finalPredictionSpans) else 0
-      self.FN = len([trueAspect for trueAspect in self.trueAspects if not any(trueAspect in predAspect for predAspect in self.finalPredictionAspects)])
-      self.FP = len([predAspect for predAspect in self.finalPredictionAspects if not any(true in predAspect for true in self.trueAspects)])
-    elif predType == "overlap":
-      self.TP = len([trueSpan for trueSpan, trueSenti in self.trueSpans if any(isOverlapping(trueSpan, predSpan) and trueSenti == predSenti for predSpan, predSenti, predScore in self.finalPredictionSpans)])
-      self.TN = 1 if not (self.trueSpans and self.finalPredictionSpans) else 0
-      self.FN = len([trueSpan for trueSpan, trueSenti in self.trueSpans if not any(isOverlapping(trueSpan, predSpan) and trueSenti == predSenti for predSpan, predSenti, predScore in self.finalPredictionSpans)])
-      self.FP = len([predSpan for predSpan, predSenti, predScore in self.finalPredictionSpans if not any(isOverlapping(trueSpan, predSpan) and trueSenti == predSenti for trueSpan, trueSenti in self.trueSpans)])
+def generateResult(predictions, trues, text, tokenizer, stopwords):
 
-    elif predType == 'overall':
-      self.binaryTrue = 1 if len(self.trueSpans) else 0
-      isEmpty = 1 if not (self.trueSpans and self.finalPredictionSpans) else 0
-      hasFalsePositive = 1 if len([predSpan for predSpan, predSenti, predScore in self.finalPredictionSpans if not any(isOverlapping(trueSpan, predSpan) and trueSenti == predSenti for trueSpan, trueSenti in self.trueSpans)]) >= 1 else 0
-      hasFalseNegative = 1 if ((not self.finalPredictionSpans) and self.trueSpans) else 0
-      self.binaryPred = 0 if (isEmpty or hasFalsePositive or hasFalseNegative) else 1
+  predictions = self.finalPredictionAspects
+  trues = self.trueAspects
+  text = self.text
+
+  if type(predictions) is not list:
+    predictions = [predictions]
+  if type(trues) is not list:
+    trues = [trues]
+
+  tokenText = [token.text for token in list(tokenizer(text.translate(str.maketrans('', '', string.punctuation))))]
+
+  y_pred = [0 for j in range(len(tokenText))]
+  for prediction in predictions:
+    predText, predSentiment = prediction
+    tokenPred = [token.text for token in list(tokenizer(predText.translate(str.maketrans('', '', string.punctuation))))]
+
+    for i in range(len(tokenText)):
+      start, end =  find_sub_list(tokenPred, tokenText)
+      if i >= start and i <= end:
+        y_pred[i] = 1 if predSentiment == "positive" else -1
+
+  y_true = [0 for j in range(len(tokenText))]
+  for true in trues:
+    trueText, trueSentiment = true
+    tokenTrue = [token.text for token in list(tokenizer(trueText.translate(str.maketrans('', '', string.punctuation))))]
+
+    for i in range(len(tokenText)):
+      start, end =  find_sub_list(tokenTrue, tokenText)
+      if i >= start and i <= end:
+        y_true[i] = 1 if trueSentiment == "positive" else -1
 
 
-    if not (self.TP == 0 and self.FN == 0 and self.FP == 0):
-        self.F1 = self.TP/(self.TP+0.5*(self.FP+self.FN))
-    else:
-        self.TP = 1
-        self.F1 = 1
+  self.yTrue, self.yPred = y_true, y_pred
 
 
 
@@ -104,14 +118,9 @@ class ElementList:
     self.nlp = asba_nlp
     self.ignoreNeutral = ignoreNeutral
 
-    self.binaryTrue = []
-    self.binaryPred = []
+    self.yTrue = []
+    self.yPred = []
 
-    self.TP = 0
-    self.TN = 0
-    self.FP = 0
-    self.FN = 0
-    self.F1 = 0
 
   def generateQuestions(self, k):
 
