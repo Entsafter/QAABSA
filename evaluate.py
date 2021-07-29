@@ -67,7 +67,7 @@ class DataElement:
     self.finalPredictionSpans, self.finalPredictionAspects = getAspectSpans(self.evaluatedText, self.text, maxScore, excludePercentage, type=spanType)
 
 
-def generateResult(predictions, trues, text, tokenizer, stopwords):
+def generateResult(tokenizer, stopwords):
 
   predictions = self.finalPredictionAspects
   trues = self.trueAspects
